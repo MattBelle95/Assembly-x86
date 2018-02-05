@@ -1,0 +1,62 @@
+CALL SetGraphicsMode
+    
+    MOV AL,0FH ;pixel color
+    
+    MOV CX,100 ;x
+    MOV DX,50  ;y
+    CALL DrawSquare
+
+
+PROC DrawSquare 
+    CALL DRAWHORZ
+    CALL DRAWVERT
+    ADD DX,20
+    CALL DRAWHORZ
+    SUB DX,20
+    ADD CX,20
+    CALL DRAWVERT  
+    SUB CX,20
+    
+    RET
+ENDP DrawSquare
+
+PROC DRAWHORZ 
+    MOV BX,CX
+    ADD BX,20
+    _HORZ:CALL DRAW
+    INC CX
+    CMP CX,BX
+    JNE _HORZ
+    SUB CX,20
+    INC SI
+    RET
+ENDP DRAWHORZ
+
+PROC DRAWVERT 
+    MOV BX,DX
+    ADD BX,20
+    _VERT:CALL DRAW
+    INC DX
+    CMP DX,BX
+    JNE _VERT
+    SUB DX,20
+    INC SI
+    RET
+ENDP DRAWVERT    
+    
+
+PROC DRAW 
+    PUSH AX
+    MOV AH,0CH
+    INT 10H
+    POP AX
+    RET
+ENDP DRAW
+
+PROC SetGraphicsMode 
+    PUSH AX
+    MOV AX,0013H
+    INT 10H
+    POP AX
+    RET
+ENDP SetGraphicsMode
